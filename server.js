@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 const data = {
   users: [
     {
-      id: 123,
+      id: '123',
       name: 'John',
       email: 'john@gmail.com',
       password: 'password',
@@ -15,7 +15,7 @@ const data = {
       joined: new Date()
     },
     {
-      id: 124,
+      id: '124',
       name: 'David',
       email: 'david@gmail.com',
       password: '123456',
@@ -41,7 +41,7 @@ app.post('/register', (req, res) => {
   const { name, email, password } = req.body
 
   data.users.push({
-    id: 125,
+    id: '125',
     name: name,
     email: email,
     password: password,
@@ -51,6 +51,40 @@ app.post('/register', (req, res) => {
 
   res.json(data.users[data.users.length - 1]);
 });
+
+app.get('/profile/:id', (req, res) => {
+  const { id } = req.params;
+  let found = false;
+
+  data.users.forEach(user => {
+    if (user.id === id) {
+      found = true;
+      return res.json(user);
+    }
+  });
+
+  if (!found) {
+    res.status(404).json('not found');
+  }
+});
+
+app.put('/image', (req, res) => {
+  const { id } = req.body;
+  let found = false;
+
+  data.users.forEach(user => {
+    if (user.id === id) {
+      found = true;
+      user.entries++;
+      return res.json(user.entries);
+    }
+  });
+
+  if (!found) {
+    res.status(404).json('not found');
+  }
+});
+
 
 app.listen(3000, () => {
   console.log('app is running on port 3000');
