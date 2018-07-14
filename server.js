@@ -12,10 +12,12 @@ const image = require('./controllers/image');
 const db = knex({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : '123456',
-    database : 'fda'
+    // host : '127.0.0.1',
+    // user : 'postgres',
+    // password : '123456',
+    // database : 'fda'
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
   }
 });
 
@@ -24,7 +26,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/', (req, res) => { res.json('all is well') })
+app.get('/', (req, res) => { res.send('all is well') })
 
 app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) });
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) });
